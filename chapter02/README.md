@@ -24,14 +24,14 @@ However, we are able to change that order of execution using _decision_ and/or _
 
 ### Booleans for Decisions
 
-operator | meaning
--------- | -------
-< | less than
-\> | greater than
-<= | less than or equal to
-\>= | greater than or equal to
-== | equal to
-!= | not equal to
+| operator | meaning                  |
+| -------- | ------------------------ |
+| <        | less than                |
+| \>       | greater than             |
+| <=       | less than or equal to    |
+| \>=      | greater than or equal to |
+| ==       | equal to                 |
+| !=       | not equal to             |
 
 ### The `if` Statement
 
@@ -157,7 +157,7 @@ c_float = b_float
 Python has an elegant syntax for multiple assignment.
 
 ```python
-a, b, c = 15, 10 , 17
+a, b, c = 15, 10, 17
 ```
 
 #### More On `while` Loop Control and Initialization
