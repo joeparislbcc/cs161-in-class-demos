@@ -8,6 +8,7 @@ win.setup(400, 400)
 
 tommy = turtle.Turtle()
 tommy.speed(1)
+tommy.shape("turtle")
 
 tommy.forward(100)
 tommy.right(144)
@@ -19,6 +20,6 @@ tommy.forward(100)
 tommy.right(144)
 tommy.forward(100)
 
-tommy.hideturtle()
+# tommy.hideturtle()
 
 win.mainloop()
