@@ -1,4 +1,4 @@
-# Lecture Notes for Chapter 1
+# Lecture Notes for Chapter 1: Beginnings
 
 ## Rules
 
