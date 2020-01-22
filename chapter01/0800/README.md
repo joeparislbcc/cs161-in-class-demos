@@ -1,4 +1,6 @@
-# Lecture Notes for Chapter 1: Beginnings
+# Lecture Notes for Chapter 1
+
+> A good workman is known by his tools. &mdash; Proverb
 
 ## Rules
 
