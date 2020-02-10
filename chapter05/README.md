@@ -8,6 +8,7 @@
 - Sharing
 - Security
 - Simplification and Readability
+- Debugging
 
 ## Python Functions
 
