@@ -5,7 +5,7 @@ One of the most common and surprising gotcha's new Python programmers encounter 
 ## What You Wrote
 
 ```python
-    to.append(element)
+    def to.append(element)
     return to
 ```
 
@@ -41,7 +41,7 @@ Python’s default arguments are evaluated _once_ when the function is defined, 
 
 Create a new object each time the function is called, by using a default arg to signal that no argument was provided (`None` is often a good choice).
 
-~~~python
+```python
 def append_to(element, to=None):
     if to is None:
         to = []
