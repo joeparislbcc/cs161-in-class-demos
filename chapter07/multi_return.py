@@ -1,7 +1,7 @@
 #! /usr/bin/env python3.7
 
 
-def func(*args, num=2):
+def func(*args, num1=1, num2=1):
     """Return only even parameters."""
     # return_values = []
 
@@ -16,7 +16,7 @@ def func(*args, num=2):
 
     # return return_values
 
-    return [n for n in args if n % num == 0]
+    return [n for n in args if n % num1 == 0 and n % num2 == 0]
 
 
 if __name__ == "__main__":
@@ -26,5 +26,8 @@ if __name__ == "__main__":
     vals = func(5, 7, 8)
     print(vals)
 
-    vals = func(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, num=3)
+    vals = func(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, num1=3)
+    print(vals)
+
+    vals = func(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, num1=3, num2=4)
     print(vals)
