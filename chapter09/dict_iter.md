@@ -518,22 +518,257 @@ In this example, you sorted the dictionary (alphabetically) by keys using `sorte
 
 ### Sorted by Values
 
+You could also need to iterate through a dictionary in Python with its items sorted by values. You can use `sorted()` too, but with a second argument called `key`.
+
+The `key` keyword argument specifies a function of one argument that is used to extract a comparison key from each element you’re processing.
+
+To sort the items of a dictionary by values, you can write a function that returns the value of each item and use this function as the `key` argument to `sorted()`:
+
+```python
+>>> incomes = {'apple': 5600.00, 'orange': 3500.00, 'banana': 5000.00}
+>>> def by_value(item):
+...     return item[1]
+...
+>>> for k, v in sorted(incomes.items(), key=by_value):
+...     print(k, '->', v)
+...
+('orange', '->', 3500.0)
+('banana', '->', 5000.0)
+('apple', '->', 5600.0)
+```
+
+In this example, you defined `by_value()` and used it to sort the items of `incomes` by value. Then you iterated through the dictionary in sorted order by using `sorted()`. The key function (`by_value()`) tells `sorted()` to sort `incomes.items()` by the second element of each item, that is, by the value (`item[1]`).
+
+You may also just want to iterate through the values of a dictionary in sorted order, without worrying about the keys. In that case, you can use `.values()` as follows:
+
+```python
+>>> for value in sorted(incomes.values()):
+...     print(value)
+...
+3500.0
+5000.0
+5600.0
+```
+
+`sorted(incomes.values())` returned the values of the dictionary in sorted order as you desired. The keys won’t be accessible if you use `incomes.values()`, but sometimes you don’t really need the keys, just the values, and this is a fast way to get access to them.
+
 ### Reversed
+
+If you need to sort your dictionaries in reverse order, you can add `reverse=True` as an argument to `sorted()`. The keyword argument `reverse` should take a boolean value. If it’s set to `True`, then the elements are sorted in reverse order:
+
+```python
+>>> incomes = {'apple': 5600.00, 'orange': 3500.00, 'banana': 5000.00}
+>>> for key in sorted(incomes, reverse=True):
+...     print(key, '->', incomes[key])
+...
+orange -> 3500.0
+banana -> 5000.0
+apple -> 5600.0
+```
+
+Here, you iterated over the keys of `incomes` in reverse order by using `sorted(incomes, reverse=True)` in the header of the `for` loop.
+
+Finally, it’s important to note that `sorted()` doesn’t really modify the order of the underlying dictionary. What really happen is that `sorted()` creates an independent list with its element in sorted order, so `incomes` remains the same:
+
+```python
+>>> incomes
+{'apple': 5600.0, 'orange': 3500.0, 'banana': 5000.0}
+```
 
 ## Iterating Destructively With `.popitem()`
 
+Sometimes you need to iterate through a dictionary in Python and delete its items sequentially. To accomplish this task, you can use `.popitem()`, which will remove and return an arbitrary key-value pair from a dictionary. On the other hand, when you call `.popitem()` on an empty dictionary, it raises a `KeyError`.
+
+If you really need to destructively iterate through a dictionary in Python, then `.popitem()` can be useful. Here’s an example:
+
+```python
+a_dict = {'color': 'blue', 'fruit': 'apple', 'pet': 'dog'}
+
+while True:
+    try:
+        print(f'Dictionary length: {len(a_dict)}')
+        item = a_dict.popitem()
+        # Do something with item here...
+        print(f'{item} removed')
+    except KeyError:
+        print('The dictionary has no item now...')
+        break
+```
+
+Here, you used a `while` loop instead of a `for` loop. The reason for this is that it’s never safe to iterate through a dictionary in Python if you intend to modify it this way, that is, if you’re deleting or adding items to it.
+
+Inside the `while` loop, you defined a `try...except` block to catch the `KeyError` raised by `.popitems()` when `a_dict` turns empty. In the `try...except` block, you process the dictionary, removing an item in each iteration. The variable item keeps a reference to the successive items and allows you to do some actions with them.
+
 ## Using Some of Python’s Built-In Functions
+
+Python provides some built-in functions that could be useful when you’re working with collections, like dictionaries. These functions are a sort of iteration tool that provides you with another way of iterating through a dictionary in Python.
 
 ### `map()`
 
+Python’s `map()` is defined as `map(function, iterable, ...)` and returns an iterator that applies `function` to every item of `iterable`, yielding the results on demand. So, `map()` could be viewed as an iteration tool that you can use to iterate through a dictionary in Python.
+
+Suppose you have a dictionary containing the prices of a bunch of products, and you need to apply a discount to them. In this case, you can define a function that manages the discount and then uses it as the first argument to `map()`. The second argument can be `prices.items()`:
+
+```python
+>>> prices = {'apple': 0.40, 'orange': 0.35, 'banana': 0.25}
+>>> def discount(current_price):
+...     return (current_price[0], round(current_price[1] * 0.95, 2))
+...
+>>> new_prices = dict(map(discount, prices.items()))
+>>> new_prices
+{'apple': 0.38, 'orange': 0.33, 'banana': 0.24}
+```
+
+Here, `map()` iterated through the items of the dictionary (`prices.items()`) to apply a 5% discount to each fruit by using `discount()`. In this case, you need to use `dict()` to generate the `new_prices` dictionary from the iterator returned by `map()`.
+
+Note that `discount()` returns a `tuple` of the form (`key, value`), where `current_price[0]` represents the key and `round(current_price[1] * 0.95, 2)` represents the new value.
+
 ### `filter()`
+
+`filter()` is another built-in function that you can use to iterate through a dictionary in Python and filter out some of its items. This function is defined as `filter(function, iterable)` and returns an iterator from those elements of i`terable` for which `function` returns `True`.
+
+Suppose you want to know the products with a price lower than `0.40`. You need to define a function to determine if the price satisfies that condition and pass it as first argument to `filter()`. The second argument can be `prices.keys()`:
+
+```python
+>>> prices = {'apple': 0.40, 'orange': 0.35, 'banana': 0.25}
+>>> def has_low_price(price):
+...     return prices[price] < 0.4
+...
+>>> low_price = list(filter(has_low_price, prices.keys()))
+>>> low_price
+['orange', 'banana']
+```
+
+Here, you iterated through the keys of prices with `filter()`. Then `filter()` applies `has_low_price()` to every key of `prices`. Finally, you need to use `list()` to generate the list of products with a low price, because `filter()` returns an iterator, and you really need a `list` object.
 
 ## Using `collections.ChainMap`
 
+[collections](https://docs.python.org/3/library/collections.html) is a useful module from the Python Standard Library that provides specialized container data types. One of these data types is `ChainMap`, which is a dictionary-like class for creating a single view of multiple mappings (like dictionaries). With `ChainMap`, you can group multiple dictionaries together to create a single, updateable view.
+
+Now, suppose you have two (or more) dictionaries, and you need to iterate through them together as one. To achieve this, you can create a `ChainMap` object and initialize it with your dictionaries:
+
+```python
+>>> from collections import ChainMap
+>>> fruit_prices = {'apple': 0.40, 'orange': 0.35}
+>>> vegetable_prices = {'pepper': 0.20, 'onion': 0.55}
+>>> chained_dict = ChainMap(fruit_prices, vegetable_prices)
+>>> chained_dict  # A ChainMap object
+ChainMap({'apple': 0.4, 'orange': 0.35}, {'pepper': 0.2, 'onion': 0.55})
+>>> for key in chained_dict:
+...     print(key, '->', chained_dict[key])
+...
+pepper -> 0.2
+orange -> 0.35
+onion -> 0.55
+apple -> 0.4
+```
+
+After importing `ChainMap` from collections, you need to create a `ChainMap` object with the dictionaries you want to chain, and then you can freely iterate through the resulting object as you would do with a regular dictionary.
+
+`ChainMap` objects also implement `.keys()`, `.values()`, and `.items()` as a standard dictionary does, so you can use these methods to iterate through the dictionary-like object generated by `ChainMap`, just like you would do with a regular dictionary:
+
+```python
+>>> for key, value in chained_dict.items():
+...     print(key, '->', value)
+...
+apple -> 0.4
+pepper -> 0.2
+orange -> 0.35
+onion -> 0.55
+```
+
+In this case, you’ve called `.items()` on a `ChainMap` object. The `ChainMap` object behaved as if it were a regular dictionary, and `.items()` returned a dictionary view object that can be iterated over as usual.
+
 ## Using itertools
+
+Python’s itertools is a module that provides some useful tools to perform iteration tasks. Let’s see how you can use some of them to iterate through a dictionary in Python.
 
 ### Cyclic Iteration With `cycle()`
 
+Suppose you want to iterate through a dictionary in Python, but you need to iterate through it repeatedly in a single loop. To get this task done, you can use `itertools.cycle(iterable)`, which makes an iterator returning elements from iterable and saving a copy of each. When iterable is exhausted, `cycle()` returns elements from the saved copy. This is performed in cyclic fashion, so it’s up to you to stop the cycle.
+
+In the following example, you’ll be iterating through the items of a dictionary three consecutive times:
+
+```python
+>>> from itertools import cycle
+>>> prices = {'apple': 0.40, 'orange': 0.35, 'banana': 0.25}
+>>> times = 3  # Define how many times you need to iterate through prices
+>>> total_items = times * len(prices)
+>>> for item in cycle(prices.items()):
+...     if not total_items:
+...         break
+...     total_items -= 1
+...     print(item)
+...
+('apple', 0.4)
+('orange', 0.35)
+('banana', 0.25)
+('apple', 0.4)
+('orange', 0.35)
+('banana', 0.25)
+('apple', 0.4)
+('orange', 0.35)
+('banana', 0.25)
+```
+
+The preceding code allowed you to iterate through `prices` a given number of times (3 in this case). This cycle could be as long as you need, but you are responsible for stopping it. The `if` condition breaks the cycle when total_items counts down to zero.
+
 ### Chained Iteration With `chain()`
 
+`itertools` also provides `chain(*iterables)`, which gets some `iterables` as arguments and makes an iterator that yields elements from the first iterable until it’s exhausted, then iterates over the next iterable and so on, until all of them are exhausted.
+
+This allows you to iterate through multiple dictionaries in a chain, like to what you did with `collections.ChainMap`:
+
+```python
+>>> from itertools import chain
+>>> fruit_prices = {'apple': 0.40, 'orange': 0.35, 'banana': 0.25}
+>>> vegetable_prices = {'pepper': 0.20, 'onion': 0.55, 'tomato': 0.42}
+>>> for item in chain(fruit_prices.items(), vegetable_prices.items()):
+...     print(item)
+...
+('apple', 0.4)
+('orange', 0.35)
+('banana', 0.25)
+('pepper', 0.2)
+('onion', 0.55)
+('tomato', 0.42)
+```
+
+In the above code, `chain()` returned an iterable that combined the items from `fruit_prices` and `vegetable_prices`.
+
+It’s also possible to use `.keys()` or `.values()`, depending on your needs, with the condition of being homogeneous: if you use `.keys()` for an argument to `chain()`, then you need to use `.keys()` for the rest of them.
+
 ## Using the Dictionary Unpacking Operator (`**`)
+
+Python 3.5 brings a new and interesting feature. [PEP 448 - Additional Unpacking Generalizations](https://www.python.org/dev/peps/pep-0448) can make your life easier when it comes to iterating through multiple dictionaries in Python. Let’s see how this works with a short example.
+
+Suppose you have two (or more) dictionaries, and you need to iterate through them together, without using `collections.ChainMap` or `itertools.chain()`, as you’ve seen in the previous sections. In this case, you can use the dictionary unpacking operator (`**`) to merge the two dictionaries into a new one and then iterate through it:
+
+```python
+>>> fruit_prices = {'apple': 0.40, 'orange': 0.35}
+>>> vegetable_prices = {'pepper': 0.20, 'onion': 0.55}
+>>> # How to use the unpacking operator **
+>>> {**vegetable_prices, **fruit_prices}
+{'pepper': 0.2, 'onion': 0.55, 'apple': 0.4, 'orange': 0.35}
+>>> # You can use this feature to iterate through multiple dictionaries
+>>> for k, v in {**vegetable_prices, **fruit_prices}.items():
+...     print(k, '->', v)
+...
+pepper -> 0.2
+onion -> 0.55
+apple -> 0.4
+orange -> 0.35
+```
+
+The dictionary unpacking operator (`**`) is really an awesome feature in Python. It allows you to merge multiple dictionaries into a new one, as you did in the example with `vegetable_prices` and `fruit_prices`. Once you’ve merged the dictionaries with the unpacking operator, you can iterate through the new dictionary as usual.
+
+It’s important to note that if the dictionaries you’re trying to merge have repeated or common keys, then the values of the right-most dictionary will prevail:
+
+```python
+>>> vegetable_prices = {'pepper': 0.20, 'onion': 0.55}
+>>> fruit_prices = {'apple': 0.40, 'orange': 0.35, 'pepper': .25}
+>>> {**vegetable_prices, **fruit_prices}
+{'pepper': 0.25, 'onion': 0.55, 'apple': 0.4, 'orange': 0.35}
+```
+
+The pepper key is present in both dictionaries. After you merge them, the `fruit_prices` value for `pepper` (`0.25`) prevailed, because `fruit_prices` is the right-most dictionary.
