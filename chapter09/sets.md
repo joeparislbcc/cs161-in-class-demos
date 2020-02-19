@@ -566,6 +566,214 @@ False
 
 - __Note:__ _The `>` operator is the only way to test whether a set is a proper superset. There is no corresponding method._
 
-
 ## Modifying a Set
-## Frozen Sets
+
+Although the elements contained in a set must be of immutable type, sets themselves can be modified.
+
+Like the operations above, there are a mix of operators and methods that can be used to change the contents of a set.
+
+### Augmented Assignment Operators and Methods
+
+Each of the union, intersection, difference, and symmetric difference operators listed above has an augmented assignment form that can be used to modify a set.
+
+For each, there is a corresponding method as well.
+
+```python
+x1.update(x2[, x3 ...])
+x1 |= x2 [| x3 ...]
+```
+
+> Modify a set by union.
+
+`x1.update(x2)` and `x1 |= x2` add to `x1` any elements in `x2` that `x1` does not already have:
+
+```python
+>>> x1 = {'foo', 'bar', 'baz'}
+>>> x2 = {'foo', 'baz', 'qux'}
+
+>>> x1 |= x2
+>>> x1
+{'qux', 'foo', 'bar', 'baz'}
+
+>>> x1.update(['corge', 'garply'])
+>>> x1
+{'qux', 'corge', 'garply', 'foo', 'bar', 'baz'}
+```
+
+```python
+x1.intersection_update(x2[, x3 ...])
+x1 &= x2 [& x3 ...]
+```
+
+> Modify a set by intersection.
+
+`x1.intersection_update(x2)` and `x1 &= x2` update `x1`, retaining only elements found in both `x1` and `x2`:
+
+```python
+>>> x1 = {'foo', 'bar', 'baz'}
+>>> x2 = {'foo', 'baz', 'qux'}
+
+>>> x1 &= x2
+>>> x1
+{'foo', 'baz'}
+
+>>> x1.intersection_update(['baz', 'qux'])
+>>> x1
+{'baz'}
+```
+
+```python
+x1.difference_update(x2[, x3 ...])
+x1 -= x2 [| x3 ...]
+```
+
+> Modify a set by difference.
+
+`x1.difference_update(x2)` and `x1 -= x2` update `x1`, removing elements found in `x2`:
+
+```python
+>>> x1 = {'foo', 'bar', 'baz'}
+>>> x2 = {'foo', 'baz', 'qux'}
+
+>>> x1 -= x2
+>>> x1
+{'bar'}
+
+>>> x1.difference_update(['foo', 'bar', 'qux'])
+>>> x1
+set()
+```
+
+```python
+x1.symmetric_difference_update(x2)
+x1 ^= x2
+```
+
+> Modify a set by symmetric difference.
+
+`x1.symmetric_difference_update(x2)` and `x1 ^= x2` update `x1`, retaining elements found in either `x1` or `x2`, but not both:
+
+```python
+>>> x1 = {'foo', 'bar', 'baz'}
+>>> x2 = {'foo', 'baz', 'qux'}
+>>>
+>>> x1 ^= x2
+>>> x1
+{'bar', 'qux'}
+>>>
+>>> x1.symmetric_difference_update(['qux', 'corge'])
+>>> x1
+{'bar', 'corge'}
+```
+
+### Other Methods For Modifying Sets
+
+Aside from the augmented operators above, Python supports several additional methods that modify sets.
+
+```python
+x.add(<elem>)
+```
+
+> Adds an element to a set.
+
+`x.add(<elem>)` adds `<elem>`, which must be a single immutable object, to `x`:
+
+```python
+>>> x = {'foo', 'bar', 'baz'}
+
+>>> x.add('qux')
+>>> x
+{'bar', 'baz', 'foo', 'qux'}
+```
+
+```python
+x.remove(<elem>)
+```
+
+> Removes an element from a set.
+
+`x.remove(<elem>)` removes `<elem>` from `x`. Python raises an exception if `<elem>` is not in `x`:
+
+```python
+>>> x = {'foo', 'bar', 'baz'}
+
+>>> x.remove('baz')
+>>> x
+{'bar', 'foo'}
+
+>>> x.remove('qux')
+Traceback (most recent call last):
+  File "<pyshell#58>", line 1, in <module>
+    x.remove('qux')
+KeyError: 'qux'
+```
+
+```python
+x.discard(<elem>)
+```
+ > Removes an element from a set.
+
+```x.discard(<elem>)` also removes `<elem>` from `x`. However, if `<elem>` is not in `x`, this method quietly does nothing instead of raising an exception:
+
+```python
+>>> x = {'foo', 'bar', 'baz'}
+
+>>> x.discard('baz')
+>>> x
+{'bar', 'foo'}
+
+>>> x.discard('qux')
+>>> x
+{'bar', 'foo'}
+```
+
+```python
+x.pop()
+```
+
+> Removes a random element from a set.
+
+`x.pop()` removes and returns an arbitrarily chosen element from `x`. If `x` is empty, `x.pop()` raises an exception:
+
+```python
+>>> x = {'foo', 'bar', 'baz'}
+
+>>> x.pop()
+'bar'
+>>> x
+{'baz', 'foo'}
+
+>>> x.pop()
+'baz'
+>>> x
+{'foo'}
+
+>>> x.pop()
+'foo'
+>>> x
+set()
+
+>>> x.pop()
+Traceback (most recent call last):
+  File "<pyshell#82>", line 1, in <module>
+    x.pop()
+KeyError: 'pop from an empty set'
+```
+
+```python
+x.clear()
+```
+
+> Clears a set.
+
+`x.clear()` removes all elements from `x`:
+
+```python
+>>> x = {'foo', 'bar', 'baz'}
+>>> x
+{'foo', 'bar', 'baz'}
+>>>
+>>> x.clear()
+>>> x
+set()
+```
