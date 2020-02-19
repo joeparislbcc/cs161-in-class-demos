@@ -262,6 +262,7 @@ Several Python operators and built-in functions can also be used with lists in w
     >>> max(a)
     'qux'
     ```
+
 It’s not an accident that strings and lists behave so similarly. They are both special cases of a more general object type called an _iterable_.
 
 In each example above, the list is always assigned to a variable before an operation is performed on it.
