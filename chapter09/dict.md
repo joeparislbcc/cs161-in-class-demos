@@ -466,7 +466,7 @@ The `len()` function returns the number of key-value pairs in a dictionary:
 
 `d.clear()`
 
-Clears a dictionary.
+> Clears a dictionary.
 
 `d.clear()` empties dictionary `d` of all key-value pairs:
 
@@ -482,7 +482,7 @@ Clears a dictionary.
 
 `d.get(<key>[,default])`
 
-Returns the value for a key if it exists in the dictionary.
+> Returns the value for a key if it exists in the dictionary.
 
 `.get()` provides a convenient way of getting the value of a key from a dictionary without checking ahead of time whether the key exists, and without raising an error.
 
@@ -506,7 +506,7 @@ If `<key>` is not found and the optional `<default>` argument is specified, that
 
 `d.items()`
 
-Returns a list of key-value pairs in a dictionary.
+> Returns a list of key-value pairs in a dictionary.
 
 `d.items()` returns a list of tuples containing the key-value pairs in d. The first item in each tuple is the key, and the second item is the key’s value:
 
@@ -525,7 +525,7 @@ Returns a list of key-value pairs in a dictionary.
 
 `d.keys()`
 
-Returns a list of keys in a dictionary.
+> Returns a list of keys in a dictionary.
 
 `d.keys()` returns a list of all keys in `d`:
 
@@ -540,7 +540,7 @@ Returns a list of keys in a dictionary.
 
 `d.values()`
 
-Returns a list of values in a dictionary.
+> Returns a list of values in a dictionary.
 
 `d.values()` returns a list of all values in `d`:
 
@@ -568,7 +568,7 @@ Any duplicate values in `d` will be returned as many times as they occur:
 
 `d.pop(<key>[,default])`
 
-Removes a key from a dictionary, if it is present, and returns its value.
+> Removes a key from a dictionary, if it is present, and returns its value.
 
 If `<key>` is present in `d`, `d.pop(<key>)` removes `<key>` and returns its associated value:
 
@@ -600,16 +600,74 @@ If <key> is not in d, and the optional <default> argument is specified, then tha
 -1
 >>> d
 {'a': 10, 'b': 20, 'c': 30}
+
 `d.popitem()`
 
+> Removes a key-value pair from a dictionary.
 
-d.update(<obj>)
-### Conclusion
+`d.popitem()` removes a random, arbitrary key-value pair from `d` and returns it as a tuple:
 
+```python
+>>> d = {'a': 10, 'b': 20, 'c': 30}
 
+>>> d.popitem()
+('c', 30)
+>>> d
+{'a': 10, 'b': 20}
 
+>>> d.popitem()
+('b', 20)
+>>> d
+{'a': 10}
+```
 
+If `d` is empty, `d.popitem()` raises a `KeyError` exception:
 
-dict & set comprehensions
+```python
+>>> d = {}
+>>> d.popitem()
+Traceback (most recent call last):
+  File "<pyshell#11>", line 1, in <module>
+    d.popitem()
+KeyError: 'popitem(): dictionary is empty'
+```
 
-more on scope (LEGB) in separate file
+`d.update(<obj>)`
+
+> Merges a dictionary with another dictionary or with an iterable of key-value pairs.
+
+If `<obj>` is a dictionary, `d.update(<obj>)` merges the entries from `<obj>` into `d`. For each key in `<obj>`:
+
+- If the key is not present in `d`, the key-value pair from `<obj>` is added to `d`.
+- If the key is already present in `d`, the corresponding value in `d` for that key is updated to the value from `<obj>`.
+
+Here is an example showing two dictionaries merged together:
+
+```python
+>>> d1 = {'a': 10, 'b': 20, 'c': 30}
+>>> d2 = {'b': 200, 'd': 400}
+
+>>> d1.update(d2)
+>>> d1
+{'a': 10, 'b': 200, 'c': 30, 'd': 400}
+```
+
+In this example, key `'b'` already exists in `d1`, so its value is updated to `200`, the value for that key from `d2`. However, there is no key `'d'` in `d1`, so that key-value pair is added from `d2`.
+
+`<obj>` may also be a sequence of key-value pairs, similar to when the `dict()` function is used to define a dictionary. For example, `<obj>` can be specified as a list of tuples:
+
+```python
+>>> d1 = {'a': 10, 'b': 20, 'c': 30}
+>>> d1.update([('b', 200), ('d', 400)])
+>>> d1
+{'a': 10, 'b': 200, 'c': 30, 'd': 400}
+```
+
+Or the values to merge can be specified as a list of keyword arguments:
+
+```python
+>>> d1 = {'a': 10, 'b': 20, 'c': 30}
+>>> d1.update(b=200, d=400)
+>>> d1
+{'a': 10, 'b': 200, 'c': 30, 'd': 400}
+```
