@@ -25,18 +25,12 @@ LEGB
 - __G__ obal
 - __B__ uilt-in
 
-## Local
+![LEGB](images/LEGB.png)
 
-The local namespace was discussed previously in the context of functions. It is the namespace that comes into being when the function is invoked and becomes inactive wen the function invocation ends.
+The local, global, and built-in namespaces are pretty easy to understand.
 
-While the local namespace is active it is the first namespace that is checked for the existence of an identifier.
+demo: `ns_demo.py`
 
-```python
-count = 25
+With those firmly in mind, enclosing is now also easy to grasp.
 
-def func(param1=123, param2="hi mom!"):
-    count = 37
-    print()
-
-```
-`ns_demo.py`
+demo: `ns_demo_2.py`
